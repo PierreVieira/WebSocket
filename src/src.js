@@ -1,46 +1,39 @@
-window.onload = function() {
+import {socketStatus, messagesList, form, messageField, closeBtn} from "./elements.js"
 
-    // Get references to elements on the page.
-    const form = document.getElementById('message-form');
-    const messageField = document.getElementById('message');
-    const messagesList = document.getElementById('messages');
-    const socketStatus = document.getElementById('status');
-    const closeBtn = document.getElementById('close');
-
+window.onload = function () {
 
     // Create a new WebSocket.
     const socket = new WebSocket('wss://echo.websocket.org');
 
-
     // Handle any errors that occur.
-    socket.onerror = function(error) {
+    socket.onerror = function (error) {
         console.log('WebSocket Error: ' + error);
     };
 
 
     // Show a connected message when the WebSocket is opened.
-    socket.onopen = function(event) {
+    socket.onopen = function (event) {
         socketStatus.innerHTML = 'Connected to: ' + event.currentTarget.url;
         socketStatus.className = 'open';
     };
 
 
     // Handle messages sent by the server.
-    socket.onmessage = function(event) {
+    socket.onmessage = function (event) {
         const message = event.data;
         messagesList.innerHTML += '<li class="received"><span>Received:</span>' + message + '</li>';
     };
 
 
     // Show a disconnected message when the WebSocket is closed.
-    socket.onclose = function() {
+    socket.onclose = function () {
         socketStatus.innerHTML = 'Disconnected from WebSocket.';
         socketStatus.className = 'closed';
     };
 
 
     // Send a message when the form is submitted.
-    form.onsubmit = function(e) {
+    form.onsubmit = function (e) {
         e.preventDefault();
 
         // Retrieve the message from the textarea.
@@ -60,13 +53,10 @@ window.onload = function() {
 
 
     // Close the WebSocket connection when the close button is clicked.
-    closeBtn.onclick = function(e) {
+    closeBtn.onclick = function (e) {
         e.preventDefault();
-
         // Close the WebSocket.
         socket.close();
-
         return false;
     };
-
 };
